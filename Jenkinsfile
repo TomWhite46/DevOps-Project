@@ -1,7 +1,7 @@
 pipeline{
         agent any
         environment {
-            DB_URI = 'mysql+pymysql://admin:WeLoveLuke@project-database.cyknho36mb9t.eu-west-1.rds.amazonaws.com:3306/users'
+            DB_URI = credentials('DB_link')
             SECR_KEY = '1234'
         }
         stages{
