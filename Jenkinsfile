@@ -8,7 +8,7 @@ pipeline{
             stage('Testing'){
                 steps{
                     sh "cd /home/jenkins/.jenkins/workspace/project-pipeline/frontend"
-                    sh "pip3 install -r requirements.txt"
+                    sh "pip3 install -r /home/jenkins/.jenkins/workspace/project-pipeline/frontend/requirements.txt"
                     sh "python3 -m pytest --cov application"
                     sh "cd /home/jenkins/.jenkins/workspace/project-pipeline/backend"
                     sh "pip3 install -r requirements.txt"
