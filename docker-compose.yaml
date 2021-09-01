@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  frontend:
+    image: frontend-image:latest
+    build: ./frontend
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5000
+      published: 5000
+      protocol: tcp
+      #container_name: frontend
+  backend:
+    image: backend-image:latest
+    build: ./backend
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5001
+      published: 5001
+      protocol: tcp
+      #container_name: backend
+    environment:
+      DATABASE_URI: ${DB_URI}
+      SECRET_KEY: ${SECR_KEY}
