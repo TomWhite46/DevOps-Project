@@ -8,7 +8,7 @@ pipeline{
             stage('Run docker'){
                 steps{
                     sh "cd /home/jenkins/.jenkins/workspace/project-pipeline"
-                    sh "docker-compose up -d"
+                    sh "docker-compose up -d --build"
                 }
             }
             stage('Make Files'){
