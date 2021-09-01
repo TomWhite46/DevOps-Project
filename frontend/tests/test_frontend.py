@@ -5,7 +5,7 @@ import requests
 import requests_mock
 
 
-from frontend import app
+from application import app
 from os import getenv
 
 class TestBase(TestCase):
