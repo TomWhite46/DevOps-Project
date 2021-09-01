@@ -2,7 +2,7 @@ pipeline{
         agent any
         environment {
             DB_URI = credentials('DB_link')
-            SECR_KEY = '1234'
+            SECR_KEY = credentials('Secret_Key')
         }
         stages{
             stage('Run docker'){
