@@ -9,10 +9,10 @@ pipeline{
                 steps{
                     sh "cd /home/jenkins/.jenkins/workspace/project-pipeline/frontend"
                     sh "pip3 install -r /home/jenkins/.jenkins/workspace/project-pipeline/frontend/requirements.txt"
-                    sh "python3 -m pytest --cov application"
+                    sh "python3 -m pytest"
                     sh "cd /home/jenkins/.jenkins/workspace/project-pipeline/backend"
                     sh "pip3 install -r /home/jenkins/.jenkins/workspace/project-pipeline/backend/requirements.txt"
-                    sh "python3 -m pytest --cov application"
+                    sh "python3 -m pytest"
                 }
             }
                 stage('Run docker'){
