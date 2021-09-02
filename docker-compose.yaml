@@ -13,8 +13,8 @@ services:
   frontend:
     image: frontend-image:latest
     build: ./frontend
-    #deploy:
-      #replicas: 3
+    deploy:
+      replicas: 3
     ports:
     - target: 5000
       published: 5000
@@ -23,8 +23,8 @@ services:
   backend:
     image: backend-image:latest
     build: ./backend
-    #deploy:
-      #replicas: 3
+    deploy:
+      replicas: 3
     ports:
     - target: 5001
       published: 5001
