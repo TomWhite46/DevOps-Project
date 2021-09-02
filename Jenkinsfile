@@ -14,7 +14,7 @@ pipeline{
             }
             stage('Testing'){
                 steps{
-                    sh "cd ./frontend && pip3 install -r requirements.txt  && python3 -m pytest"
+                    sh "cd ./frontend && pip3 install -r requirements.txt  && python3 -m pytest --cov application"
                     sh "cd ./backend && pip3 install -r requirements.txt && python3 -m pytest"
                 }
             }
