@@ -16,6 +16,6 @@ class TestBase(TestCase):
 class TestViews(TestBase):
     def test_backend_response(self):
         with requests_mock.Mocker() as mock:
-            mock.get('http://10.0.1.244:5001/backend', json={"test": "test"})
+            mock.get('http://backend:5001/backend', json={"test": "test"})
             response = self.client.get(url_for('get_users'))
             self.assertEqual(response.status_code, 200)
