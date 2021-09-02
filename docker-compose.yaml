@@ -19,7 +19,7 @@ services:
     - target: 5000
       published: 5000
       protocol: tcp
-      container_name: frontend
+    container_name: frontend
   backend:
     image: backend-image:latest
     build: ./backend
@@ -29,7 +29,7 @@ services:
     - target: 5001
       published: 5001
       protocol: tcp
-      container_name: backend
+    container_name: backend
     environment:
       DATABASE_URI: ${DB_URI}
       SECRET_KEY: ${SECR_KEY}
