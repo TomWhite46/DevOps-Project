@@ -11,7 +11,7 @@ services:
       source: ./nginx/nginx.conf
       target: /etc/nginx/nginx.conf
   frontend:
-    image: frontend-image:latest
+    image: tomrwhite/frontend-image:latest
     build: ./frontend
     deploy:
       replicas: 3
@@ -21,7 +21,7 @@ services:
       protocol: tcp
     container_name: project-stack_frontend
   backend:
-    image: backend-image:latest
+    image: tomrwhite/backend-image:latest
     build: ./backend
     deploy:
       replicas: 3
