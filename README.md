@@ -10,16 +10,15 @@
 7. Jenkins
 8. Python testing
 <br><br>
-
 # 1 Jira Board
 The Jira board can be found [here](https://bootcampbae.atlassian.net/jira/software/projects/DEV/boards/6).
 Jira stories were created and assigned to 6 overarching epics for different aspects of the project; every story was given a priority assessment and a story point estimate.  
 ![Imgur](https://i.imgur.com/DxYqZDF.png)
 The stories were then put into a sprint to last the duration of the project. Items were moved across the sprint's Kanban board in real time, as we completed the tasks.  
 ![Imgur](https://i.imgur.com/jANge5c.png)
-
+<br><br>
 # 2 Risk Assessment
-
+<br><br>
 # 3 Creation of AWS structure
 
 ## VPC, Subnets and Security Groups Created
@@ -35,8 +34,7 @@ The stories were then put into a sprint to last the duration of the project. Ite
 * RDS mysql created and given database security group.
 * 3 EC2 instances created: one for the manager of the swarm, two others to be workers. Only manager EC2 used until swarm set up (below).
 ![Imgur](https://i.imgur.com/bx43G85.png)
-
-
+<br><br>
 # 4 Microservice setup
 ## SSH into EC2 instance, install Docker and Docker-Compose
 ## Basic Services set up:
@@ -59,12 +57,12 @@ Similarly, the backend app required python and the files specified in the requir
 By running ```curl localhost``` on the EC2 instance and by navigating to the EC2's public IP address in a browser, the app was confirmed to be functional, as the data was retrieved from the database and returned in HTML format:
 ![Imgur](https://i.imgur.com/Er92THN.png)  
 ![Imgur](https://i.imgur.com/vtr7EGE.png) 
-
+<br><br>
 # 5 Docker-compose
 A docker-compose.yaml could then be created, referring to the Dockerfiles created above for the build stage.  
 ![Imgur](https://i.imgur.com/zDRTFEH.png)  
 At this stage, as not currently using Docker Swarm, container_name was set for the frontend and backend services.
-
+<br><br>
 # 6 Docker swarm stack
 ## Swarm created
 Swarm created on the manager EC2 using the command ```docker swarm init```; the other two EC2s were connected to the sawrm using the token provided.  
@@ -81,7 +79,7 @@ Then the docker-compose.yaml was edited to ensure that the images specified were
 ## Stack 
 The stack was then deployed using ```docker stack deploy --compose-file docker-compose.yaml project-stack```. Containers were then deployed across the three EC2 instances in the swarm: 
 ![Imgur](https://i.imgur.com/FpwFFpb.png)
-
+<br><br>
 # 7 Jenkins
 ## Pipeline created, associated with Github repo
 ![Imgur](https://i.imgur.com/e0Msn5M.png)
@@ -95,12 +93,21 @@ Note that credentials were set up as secrets in Jenkins in order to protect the 
 
 ## Webhook set up
 ![Imgur](https://i.imgur.com/lrgJKjm.png)
-
 Commits to main on Github now caused automatic rebuild on Jenkins.
-
+<br><br>
 # 8 Python testing with pytest
 Python3 installed on EC2 instance, and script for python tests added to Jenkinsfile.
 ![Imgur](https://i.imgur.com/Xmo46RA.png)  
 On committing the updated Jenkinsfile to Github, the tests were run as part of the automatically triggered Jenkins build, showing a successful result.  
-![Imgur](https://i.imgur.com/OWwRV4x.png)
+![Imgur](https://i.imgur.com/OWwRV4x.png)  
+Added in report output to html:
 
+Added in post-build action to archive the index.html.
+<br><br>
+# 9 Final test build: edit made to index.html: 
+Edit made to index.html: inserted word 'many' in line 3:
+![Imgur](https://i.imgur.com/i0Z0ifA.png)  
+Successful build on Jenkins:  
+![Imgur](https://i.imgur.com/5k5ELrG.png)  
+Edit to file reflected on webpage at EC2's public IP:  
+![Imgur](https://i.imgur.com/AiNInXO.png)
