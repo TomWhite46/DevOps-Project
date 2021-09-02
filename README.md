@@ -1,92 +1,63 @@
 # Emily's and Tom's DevOps Project
 
-This application is a simple [Flask application](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application), ready to be deployed, for your SFIA2 project.
+## 1 Creation of AWS structure
 
-The following information should be everything you need to complete the project.
-
-## Brief
-
-The application must:
-
-- Be tested 
-- Be deployed to a **Virtual Machine**
-- Make use of a **managed Database solution**
-
-## Application
-
-The application is a Flask application running in **2 micro-services** (*frontend* and *backend*).  
-
-The database directory is available should you: 
-  - want to use a MySQL container for your database at any point, *or*
-  - want to make use of the `Create.sql` file to **set up and pre-populate your database**.
-
-The application works by:
-1. The frontend service making a GET request to the backend service. 
-2. The backend service using a database connection to query the database and return a result.
-3. The frontend service serving up a simple HTML (`index.html`) to display the result.
-
-### Database Connection
-
-The database connection is handled in the `./backend/application/__init__.py` file.
-
-A typical Database URI follows the form:
-
-```
-mysql+pymysql://[db-user]:[db-password]@[db-host]/[db-name]
-```
-
-An example of this would be:
-
-```
-mysql+pymysql://root:password@mysql.123456.rds.amazonaws.com:3306/orders
-```
-
-### Environment Variables
-
-The application makes use of **2 environment variables**:
-
-- `DATABASE_URI`: as described above
-- `SECRET_KEY`: any *random string* will work here
-
-### Running a Flask Application
-
-Typically, to run a Flask application, you would:
-
-1. Install the pip dependencies from a `requirements.txt`, these can be found in the `backend` and `frontend` directories:
-
-```
-pip3 install -r requirements.txt
-```
-
-2. Run the application:
-
-```
-python3 app.py
-```
-
-![app-diagram](https://i.imgur.com/wnbDazy.png)
-
-## Testing
-
-Unit Tests have been included for both the frontend and backend services.
+### VPC, Subnets and Security Groups Created
+* VPC: a VPC with CIDR 10.0.0.0/16 was set up.
+* Separate security groups for EC2 and RDS created:
+  * EC2 instance security, allowing traffic from all sources on port 80 and 5000 (for the nginx and frontend containers) from dev IP on 22, and from within the VPC for other ports required by the app or by Docker.
+  * Database security, allowing traffic only from within the VPC on port 3306.
 
 
-You can run the tests using the command:
+### EC2 and RDS instances set up
+* RDS mysql created and given database security group.
+* 3 EC2 instances created: one for the manager of the swarm, two others to be workers. Only manager EC2 used until swarm set up (below).
+![Imgur](https://i.imgur.com/bx43G85.png)
 
-```
-python3 -m pytest
-```
 
-To generate a coverage report, you will need to run:
+## 2 Microservice setup
+### SSH into EC2 instance, install Docker and Docker-Compose
+### Basic Services set up:
+#### Materials for Docker containers for each microservice created:
+* **Nginx**: nginx.conf file set up to run as reverse proxy, redirecting http traffic on port 80 to the EC2's IP address at port 5000, where the Flask app frontend is set to listen.  
+![Imgur](https://i.imgur.com/GVg300D.png)
+* **Flask App Frontend**
 
-```
-python3 -m pytest --cov application
-```
+* **Flask App Backend**
 
-## Infrastructure
+#### Services set up:
+* Database: ```Create.sql``` file run on RDS to create initial database and data.
+* For frontend and backend, docker images created with ```docker build``` commands.
+* Nginx, frontend and backend run with ```docker run``` commands. For nginx, the nginx.conf file was bind mounted to the container with the ```--mount``` option and port 80 was opened on the EC2 using ```-p 80:80```.
 
-The **Minimum Viable Product** for this project should at least demonstrate the following infrastructure diagram:
+By running ```curl localhost``` on the EC2 instance and by navigating to the EC2's public IP address in a browser, the app was confirmed to be functional, as the data was retrieved from the database and returned in HTML format:
+![Imgur](https://i.imgur.com/Er92THN.png)  
+![Imgur](https://i.imgur.com/vtr7EGE.png) 
 
-![mvp-diagram](https://i.gyazo.com/f5cd176c4f440af639b7dc3c098535c7.png)
+## 3 Docker-compose
+A docker-compose.yaml could then be created, referring to the Dockerfiles created above for the build stage.
+![Imgur](https://i.imgur.com/zDRTFEH.png)
+At this stage, as not currently using Docker Swarm, container_name was set for the frontend and backend services.
 
-**Good luck!**
+## 4 Docker swarm stack
+### Upload the images to Docker hub.
+#### Make sure the build commands in the docker-compose.yaml refer to them.
+
+## 5 Jenkins
+### Pipeline created, associated with Github repo
+![Imgur](https://i.imgur.com/e0Msn5M.png)
+
+### Jenkinsfile on Github set up to run Docker on EC2:
+![Imgur](https://i.imgur.com/m1Y70g6.png)
+
+Note that credentials were set up as secrets in Jenkins in order to protect the database password.
+![Imgur](https://i.imgur.com/SFHCDQ8.png)
+
+### Webhook set up
+![Imgur](https://i.imgur.com/lrgJKjm.png)
+
+Commits to main on Github now caused automatic rebuild on Jenkins.
+
+### Python testing with pytest
+Python3 installed on EC2 instance, and script for python tests added to Jenkinsfile.
+![Imgur](https://i.imgur.com/Xmo46RA.png)
