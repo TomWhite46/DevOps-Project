@@ -10,8 +10,9 @@
 7. Jenkins
 8. Python testing
 9. Final test: update to python app
-10. Further goals
-11. Acknowledgements
+10. Stretch goal: deployment to separate dev site from dev branch
+11. Further goals
+12. Acknowledgements
 <br><br>
 
 # 1 Jira Board
@@ -152,12 +153,23 @@ Edit to file reflected on webpage at EC2's public IP:
 ![Imgur](https://i.imgur.com/AiNInXO.png)
 <br><br>
 
-# 10 Further Goals:
-* Add an extra EC2 as another manager, to increase durability of the infrastructure in the event of the manager EC2 going down.
-* Add an additional AWS network to support a Dev environment, linked using Jenkins to the dev branch of the Github.
+# 10 Stretch goal: deployment to separate dev site from dev branch
+Deploying modified builds to a non-production environment is an needed in order to ensure that the whole build works as expected before pushing it the main branch and deploying to the public site.  
+To achieve this, an additional EC2 instance was created with slightly different security rules - allowing access on port 80 only from the devs' IP addresses, to prevent public access.  
+The original EC2 rule group was broken up into the rules needed for all dev and prod EC2s on the one hand, and a separate group opening port 80 to all incoming traffic for the live EC2s. That allowed the 'ec2-security' group to be reused for the EC2 running the dev environment, so that all that was needed was an additional group allowing HTTP traffic from the devs' IPs.  
+![Imgur](https://i.imgur.com/tPe3B31.png)  
+A new Jenkins pipeline was then created on the dev EC2 instance, pointing to the dev branch on the Github repo.  
+![Imgur](https://i.imgur.com/T1Z3tqr.png)  
+An additional webhook was set up on Github:  
+![Imgur](https://i.imgur.com/pgmC5r5.png)  
+Making a commit to the dev branch on Github now causes the dev EC2's Jenkins to run the build, allowing any code changes to be tested directly on that environment before being deployed to the public-facing EC2s.
 <br><br>
 
-# 11 Acknowledgements
+# 11 Further Goals
+* Add an extra EC2 to the Docker swarm as an additional manager, to increase durability of the infrastructure in the event of the manager EC2 going down.
+<br><br>
+
+# 12 Acknowledgements
 Credit to Luke Benson for the tuition, Jordan H for the commentary in Teams chat, and BAE-12 Team 4 for emotional support.
 <br><br><br>
 ## Project by Emily Penrice and Tom White
