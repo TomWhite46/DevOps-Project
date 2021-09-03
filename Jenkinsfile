@@ -16,9 +16,9 @@ pipeline{
             stage('Testing'){
                 steps{
                     sh "cd ./frontend && pip3 install -r requirements.txt  && python3 -m pytest --cov application > frontend_coverage.txt"
-                    archiveArtifacts artifacts: 'frontend_coverage.txt'
+                    archiveArtifacts artifacts: 'frontend/frontend_coverage.txt'
                     sh "cd ./backend && pip3 install -r requirements.txt && python3 -m pytest --cov application > backend_coverage.txt"
-                    archiveArtifacts artifacts: 'backend_coverage.txt'
+                    archiveArtifacts artifacts: 'backend/backend_coverage.txt'
                 }
             }
                 stage('deploy'){
