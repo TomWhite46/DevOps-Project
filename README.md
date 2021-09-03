@@ -142,6 +142,10 @@ Looking at the console output on Jenkins shows 100% test coverage for both front
 ![Imgur](https://i.imgur.com/QvNolPY.png)
 * Backend:  
 ![Imgur](https://i.imgur.com/0HnooEp.png)
+
+Finally, steps were added to the Jenkinsfile to produce html test reports and archive them on Jenkins:
+![Imgur](https://i.imgur.com/T5f2Bdv.png)
+![Imgur](https://i.imgur.com/f2oEbDt.png)
 <br><br>
 
 # 9 Final test build: edit made to index.html: 
@@ -163,6 +167,8 @@ A new Jenkins pipeline was then created on the dev EC2 instance, pointing to the
 An additional webhook was set up on Github:  
 ![Imgur](https://i.imgur.com/pgmC5r5.png)  
 Making a commit to the dev branch on Github now causes the dev EC2's Jenkins to run the build, allowing any code changes to be tested directly on that environment before being deployed to the public-facing EC2s.
+The final CI pipeline is as in the below diagram:
+![Imgur](https://i.imgur.com/FQC8toB.png)
 <br><br>
 
 # 11 Further Goals
