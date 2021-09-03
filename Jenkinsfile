@@ -15,15 +15,16 @@ pipeline{
             }
             stage('Testing'){
                 steps{
-                    sh "cd ./frontend && pip3 install -r requirements.txt  && python3 -m pytest --cov application"
-                    sh "cd ./backend && pip3 install -r requirements.txt && python3 -m pytest --cov application"
+                    sh "cd ./frontend && pip3 install -r requirements.txt  && python3 -m pytest --cov application --cov-report html"
+                    archiveArtifacts artifacts: 'frontend/htmlcov/index.html'
+                    sh "cd ./backend && pip3 install -r requirements.txt && python3 -m pytest --cov application --cov-report html"
+                    archiveArtifacts artifacts: 'backend/htmlcov/index.html'
                 }
             }
                 stage('deploy'){
                 steps{
                     // sh "docker-compose up -d --build
                     sh "docker stack deploy --compose-file docker-compose.yaml project-stack"
-                    sh "echo 'hello'"
                 }
             }
 
