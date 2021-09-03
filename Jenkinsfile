@@ -23,6 +23,7 @@ pipeline{
                 steps{
                     // sh "docker-compose up -d --build
                     sh "docker stack deploy --compose-file docker-compose.yaml project-stack"
+                    sh "echo 'hello'"
                 }
             }
 
