@@ -6,6 +6,8 @@ services:
     - target: 80
       published: 80
       protocol: tcp
+    deploy:
+      replicas: 3
     volumes:
     - type: bind
       source: ./nginx/nginx.conf
