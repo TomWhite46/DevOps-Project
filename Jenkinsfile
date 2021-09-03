@@ -19,7 +19,7 @@ pipeline{
                     sh "cd ./backend && pip3 install -r requirements.txt && python3 -m pytest --cov application"
                 }
             }
-                stage('Run docker'){
+                stage('deploy'){
                 steps{
                     // sh "docker-compose up -d --build
                     sh "docker stack deploy --compose-file docker-compose.yaml project-stack"
