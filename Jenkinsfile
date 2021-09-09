@@ -9,9 +9,8 @@ pipeline{
         stages{
             stage('Build'){
                 steps{
-//                     sh "cd ./frontend && docker build -t docker.io/tomrwhite/frontend-image:latest ."
-                    sh "docker-compose build"
-//                     sh "cd ./backend && docker build -t docker.io/tomrwhite/backend-image:latest ."
+                    sh "cd ./frontend && docker build -t docker.io/tomrwhite/frontend-image:latest ."
+                    sh "cd ./backend && docker build -t docker.io/tomrwhite/backend-image:latest ."
                 }
             }
             stage('Testing'){
@@ -27,7 +26,7 @@ pipeline{
 //                     // sh "docker-compose up -d --build
                     sh "docker push docker.io/tomrwhite/frontend-image:latest"
                     sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PW} && docker push docker.io/tomrwhite/backend-image:latest"
-//                     sh "docker-compose push"
+
                     sh "docker stack deploy --compose-file docker-compose.yaml project-stack"
                 }
             }
