@@ -9,8 +9,9 @@ pipeline{
         stages{
             stage('Build'){
                 steps{
-                    sh "cd ./frontend && docker build -t docker.io/tomrwhite/frontend-image:latest ."
-                    sh "cd ./backend && docker build -t docker.io/tomrwhite/backend-image:latest ."
+//                     sh "cd ./frontend && docker build -t docker.io/tomrwhite/frontend-image:latest ."
+                    sh "docker-compose build"
+//                     sh "cd ./backend && docker build -t docker.io/tomrwhite/backend-image:latest ."
                 }
             }
             stage('Testing'){
